@@ -1,0 +1,45 @@
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8" />
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet"
+    integrity="sha384-GLhlTQ8iRABdZLl6O3oVMWSktQOp6b7In1Zl3/Jr59b6EGGoI1aFkw7cmDA6j6gD" crossorigin="anonymous" />
+  <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Document</title>
+</head>
+
+<h1>Student Details</h1>
+<table class="table table-hover">
+  <thread>
+    <tr>
+      <th scope="col">Name</th>
+      <th scope="col">USN</th>
+      <th scope="col">CGPA</th>
+      <th scope="col">Branch Code</th>
+      <th scope="col">Batch</th>
+    </tr>
+  </thread>
+  <% if(student.length > 0){ %>
+  <% for(var i = 0 ;i<student.length;i++){ %>
+  <tbody>
+    <tr>
+      <th><%- student[i].Name %> </th>
+      <th><%- student[i].USN %> </th>
+      <th><%- student[i].CGPA %> </th>
+      <th><%- student[i].Branch_code %> </th>
+      <th><%- student[i].Batch %> </th>
+    </tr>
+  </tbody>
+  <% } %>
+  <% }else{ %>
+  <h1>No Student Data Found</h1>
+  <% } %>
+
+</table>
+
+<body>
+
+</body>
+
+</html>
