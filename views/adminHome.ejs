@@ -20,15 +20,15 @@
       <th scope="col">Batch</th>
     </tr>
   </thread>
-  <% if(student.length > 0){ %>
-  <% for(var i = 0 ;i<student.length;i++){ %>
+  <% if(result.length > 0){ %>
+  <% for(var i = 0 ;i<result.length;i++){ %>
   <tbody>
     <tr>
-      <th><%- student[i].Name %> </th>
-      <th><%- student[i].USN %> </th>
-      <th><%- student[i].CGPA %> </th>
-      <th><%- student[i].Branch_code %> </th>
-      <th><%- student[i].Batch %> </th>
+      <th><%- result[i].Name %> </th>
+      <th><%- result[i].USN %> </th>
+      <th><%- result[i].CGPA %> </th>
+      <th><%- result[i].Branch_code %> </th>
+      <th><%- result[i].Batch %> </th>
     </tr>
   </tbody>
   <% } %>
