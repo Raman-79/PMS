@@ -88,10 +88,40 @@ app.get('/studentHome', (req, res) => {
 
 //Company Routes
 app.get('/cmpLogin', (req, res) => {
-    res.render('cmpLogin');
+    res.render('cmpLogin', { message: null });
+});
+
+app.get('/cmpHome', (req, res) => {
+    const name = req.query.Cmpname;
+    const password = req.query.password;
+
+    var query = "select * from company where CMP_name = ? and Cmp_password = ?";
+    mysql.query(query, [name, password], (error, result) => {
+        console.log(name);
+        console.log(password);
+        console.log(result);
+        if (error) {
+
+            console.log(error);
+            res.render('cmpLogin', { message: false });
+        }
+        else {
+
+            res.render('cmpHome', { result, message: true });
+        }
+    });
 })
+
 app.get('/cmpSignUp', (req, res) => {
     res.render('cmpSignUp');
+});
+app.post('/cmpSignUp', (req, res) => {
+    var { Cmpname, Role, Criteria, App_deadline, Description, Salary, Password } = req.body;
+    var q1 = "insert into company (Cmp_Name,Role,Criteria,App_deadline,Description,Salary,Cmp_password)  values('" + Cmpname + "','" + Role + "','" + Criteria + "','" + App_deadline + "','" + Description + "','" + Salary + "','" + Password + "') ";
+    mysql.query(q1, (error, result) => {
+        if (error) throw error;
+    });
+
 })
 app.listen(port, () => {
     console.log(`Server connection successfull at ${port}`);
