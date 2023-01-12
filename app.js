@@ -26,17 +26,26 @@ app.use(bodyParser.json())
 app.get('/', (req, res) => {
     res.render('home', { success: null });
 });
-
+var students = []
 app.get('/adminHome', (req, res) => {
     const admin = req.query.admin;
     const password = req.query.password;
+
     if (admin === "admin" && password === "admin@123") {
+        var query2 = "select * from company";
         var query = "select * from student";
         mysql.query(query, (error, result) => {
-            if (error) throw error;
-            res.render("adminHome", { result, success: true });
+            mysql.query(query2, (error, result2) => {
+                console.log(result);
+                console.log(result2);
+                res.render("adminHome", { students: result, company: result2 })
+            })
+
+
         });
+
     }
+
     else {
         res.render('home', { success: false });
     }
@@ -120,6 +129,7 @@ app.post('/cmpSignUp', (req, res) => {
     var q1 = "insert into company (Cmp_Name,Role,Criteria,App_deadline,Description,Salary,Cmp_password)  values('" + Cmpname + "','" + Role + "','" + Criteria + "','" + App_deadline + "','" + Description + "','" + Salary + "','" + Password + "') ";
     mysql.query(q1, (error, result) => {
         if (error) throw error;
+        res.send("Registered Succesfull")
     });
 
 })
