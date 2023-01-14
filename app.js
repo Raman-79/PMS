@@ -6,6 +6,8 @@ const bodyParser = require('body-parser');
 const dotenv = require('dotenv');
 const path = require('path');
 const { error } = require('console');
+var url = require('url');
+const { response } = require('express');
 
 //Database Connection 
 const mysql = require('./sqlConnection').con;
@@ -26,7 +28,7 @@ app.use(bodyParser.json())
 app.get('/', (req, res) => {
     res.render('home', { success: null });
 });
-var students = []
+
 app.get('/adminHome', (req, res) => {
     const admin = req.query.admin;
     const password = req.query.password;
@@ -36,12 +38,8 @@ app.get('/adminHome', (req, res) => {
         var query = "select * from student";
         mysql.query(query, (error, result) => {
             mysql.query(query2, (error, result2) => {
-                console.log(result);
-                console.log(result2);
                 res.render("adminHome", { students: result, company: result2 })
             })
-
-
         });
 
     }
@@ -50,49 +48,61 @@ app.get('/adminHome', (req, res) => {
         res.render('home', { success: false });
     }
 })
+app.get('/delete-student', (req, res) => {
+    const id = req.query.id;
+    var address = "http://localhost:5000/adminHome?admin=admin&password=admin%40123"
+    var query = "delete from student where Stu_id = ?";
+    mysql.query(query, [id], (error, result) => {
+        if (error) throw error;
+        res.redirect(address);
+    })
+})
+
+
 
 //Student Routes
 app.get('/signup', (req, res) => {
     res.render('signup');
 });
 app.post('/signup', (req, res) => {
-    var { name, usn, cgpa, branch_code, batch, password } = req.body;
-    var query1 = "insert into student (USN,CGPA,Branch_code,Name,Password,Batch)  values ('" + usn + "','" + cgpa + "','" + branch_code + "','" + name + "','" + password + "','" + batch + "')";
-    mysql.query(query1, function (error, result) {
-        if (error) {
-            console.log(error);
-            // res.render('/signup', { error, status: true });(Later for any invalid entry)
-        }
-        else {
-            var query2 = "select Name,USN,CGPA,Branch_code,Batch from student where USN = ? ";
-            mysql.query(query2, usn, (error, result) => {
-                if (error) throw error;
-                console.log(result[0].Name);
-                res.render('studentHome', { result });
-            });
-        }
-    });
-});
+    var { name, usn, cgpa, batch, branch_code, password } = req.body;
+    var query = "insert into student (Name,USN,Branch_code,CGPA,Batch,Password) values ('" + name + "','" + usn + "','" + branch_code + "','" + cgpa + "','" + batch + "','" + password + "')";
+    mysql.query(query, (error, result) => {
+        if (error) throw error;
+        res.send("Registration Successfull")
+    })
+})
 app.get('/login', (req, res) => {
     res.render('login', { message: null });
 });
 app.get('/studentHome', (req, res) => {
     const usn = req.query.usn;
-    const password = req.query.password
-    console.log(usn, password);
-    var query = "select * from student where USN =? and Password =?";
+    const password = req.query.password;
+    var query = "select * from student where USN = ? and Password =?";
+    var cmpQuery = "select  * from company";
     mysql.query(query, [usn, password], (error, result) => {
-        console.log(usn);
-        console.log(result);
-        if (error) throw error;
-        else if (result[0].USN === usn && result[0].Password === password) {
-            res.render('studentHome', { result })
+        if (result[0].USN === usn && result[0].Password === password) {
+            mysql.query(cmpQuery, (error, result1) => {
+                if (error) throw error;
+                res.render('studentHome', { result, company: result1 })
+            })
         }
         else {
             res.render('login', { message: false })
         }
     })
 });
+
+app.get('/submit-application', (req, res) => {
+    const { usn, password, CMP_id, Stu_id } = req.query;
+    var address = "http://localhost:5000/studentHome?usn=" + usn + "&password=" + password
+    var query = "insert into application (Cmp_id,Stu_id,Status) values ('" + CMP_id + "','" + Stu_id + "','Pending') "
+    mysql.query(query, (error, result) => {
+        res.redirect(address)
+    })
+})
+
+
 
 
 //Company Routes
@@ -106,16 +116,11 @@ app.get('/cmpHome', (req, res) => {
 
     var query = "select * from company where CMP_name = ? and Cmp_password = ?";
     mysql.query(query, [name, password], (error, result) => {
-        console.log(name);
-        console.log(password);
-        console.log(result);
         if (error) {
-
             console.log(error);
             res.render('cmpLogin', { message: false });
         }
         else {
-
             res.render('cmpHome', { result, message: true });
         }
     });

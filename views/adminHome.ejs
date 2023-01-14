@@ -9,11 +9,14 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Document</title>
 </head>
+<style>
+  #delete-btn {
+    text-decoration: none;
+    color: aliceblue;
+  }
+</style>
 
 <div class="container">
-  <h2>Dynamic Tabs</h2>
-  <p>To make the tabs toggleable, add the data-toggle="tab" attribute to each link. Then add a .tab-pane class with a
-    unique ID for every tab and wrap them inside a div element with class .tab-content.</p>
 
   <ul class="nav nav-tabs">
     <li class="active"><a data-toggle="tab" href="#home">Home</a></li>
@@ -31,6 +34,7 @@
             <th scope="col">CGPA</th>
             <th scope="col">Branch Code</th>
             <th scope="col">Batch</th>
+            <th scope="col"> Action</th>
           </tr>
         </thread>
         <% if(students.length > 0){ %>
@@ -42,6 +46,11 @@
             <th><%- students[i].CGPA %> </th>
             <th><%- students[i].Branch_code %> </th>
             <th><%- students[i].Batch %> </th>
+            <th>
+              <button class="btn btn-danger">
+                <a id="delete-btn" href="/delete-student?id=<%- students[i].Stu_id %>">Delete </a>
+              </button>
+            </th>
           </tr>
         </tbody>
         <% } %>
