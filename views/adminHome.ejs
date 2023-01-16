@@ -17,10 +17,11 @@
 </style>
 
 <div class="container">
-
+  <h1>Admin Page</h1>
   <ul class="nav nav-tabs">
     <li class="active"><a data-toggle="tab" href="#home">Home</a></li>
-    <li><a data-toggle="tab" href="#menu1">Company</a></li>
+    <li><a data-toggle="tab" href="#menu1">Applications</a></li>
+    <li><a data-toggle="tab" href="#menu2">Company</a></li>
   </ul>
 
   <div class="tab-content">
@@ -60,6 +61,31 @@
       </table>
     </div>
     <div id="menu1" class="tab-pane fade">
+      <h1>Application Details</h1>
+      <table class="table table-hover">
+        <thread>
+          <tr>
+            <th scope="col">USN</th>
+            <th scope="col">Company Name</th>
+            <th scope="col">Status</th>
+          </tr>
+        </thread>
+        <% if(applications.length > 0){ %>
+        <% for(var i = 0 ;i<applications.length;i++){ %>
+        <tbody>
+          <tr>
+            <th><%- applications[i].USN %> </th>
+            <th><%- applications[i].CMP_Name %> </th>
+            <th><%- applications[i].Status %> </th>
+          </tr>
+        </tbody>
+        <% } %>
+        <% }else{ %>
+        <h1>No Applications Found</h1>
+        <% } %>
+      </table>
+    </div>
+    <div id="menu2" class="tab-pane fade">
       <h1>Company Details</h1>
       <table class="table table-hover">
         <thread>
@@ -69,6 +95,7 @@
             <th scope="col">Criteria</th>
             <th scope="col">Salary</th>
             <th scope="col">Deadline</th>
+            <th scope="col">Action</th>
           </tr>
         </thread>
         <% if(company.length > 0){ %>
@@ -80,6 +107,14 @@
             <th><%- company[i].Criteria %> </th>
             <th><%- company[i]. Salary%> </th>
             <th><%- company[i].App_deadline %> </th>
+            <th>
+              <button class="btn btn-primary">
+                <a id="delete-btn" href="/update-company?CMP_id=<%- company[i].CMP_Id %>">Update</a>
+              </button>
+              <button class="btn btn-danger">
+                <a id="delete-btn" href="/delete-company?id=<%- company[i].CMP_Id %>">Delete</a>
+              </button>
+            </th>
           </tr>
         </tbody>
         <% } %>

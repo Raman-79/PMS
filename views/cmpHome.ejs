@@ -4,12 +4,70 @@
 <head>
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.1/jquery.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/js/bootstrap.min.js"></script>
+
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Document</title>
 </head>
+<style>
+    #delete_success {
+        text-decoration: none;
+        color: aliceblue;
+    }
+</style>
 
 <body>
     <h1>Hello <%-result[0].CMP_Name%></h1>
+    <h1>Application Details</h1>
+    <table class="table table-hover">
+        <thread>
+            <tr>
+                <th scope="col">USN</th>
+                <th scope="col">Status</th>
+                <th>Change application status</th>
+                <th>Submit</th>
+            </tr>
+        </thread>
+        <% if(students.length > 0){ %>
+        <% for(var i = 0 ;i<students.length;i++){ %>
+        <tbody>
+            <form action="/change_application" method="get">
+                <tr>
+                    <th><%- students[i].USN %> </th>
+                    <th><%- students[i].Status %> </th>
+                    <th>
+
+                        <select name="status" class="form-select form-select-lg mb-3"
+                            aria-label=".form-select-lg example">
+                            <option selected>Select</option>
+                            <option value="Pending">Pending</option>
+                            <option value="Accepted">Accepted</option>
+                            <option value="Rejected">Rejected</option>
+                        </select>
+                        <input type="hidden" name="Stu_id" value="<%- students[i].Stu_id %> ">
+                        <input type="hidden" name="CMP_Id" value="<%- result[0].CMP_Id %> ">
+                    </th>
+                    <th>
+                        <button type="submit" class="btn btn-sucess">
+                            Submit
+                        </button>
+                    </th>
+
+                </tr>
+            </form>
+        </tbody>
+        <% } %>
+        <% }else{ %>
+        <h1>No Students Applied</h1>
+        <% } %>
+
+
+
+
+
+        <!--Query to the admin-->
 </body>
 
 </html>
