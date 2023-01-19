@@ -36,11 +36,10 @@ app.get('/adminHome', (req, res) => {
     if (admin === "admin" && password === "admin@123") {
         var query2 = "select * from company";
         var query = "select * from student";
-        var query3 = "select S.USN,C.CMP_Name,A.Status from student S ,company C ,application A where S.Stu_id = A.Stu_id and C.Cmp_id = A.Cmp_id;"
+        var query3 = "select distinct S.USN,C.CMP_Name,A.Status from student S ,company C ,application A where S.Stu_id = A.Stu_id and C.Cmp_id = A.Cmp_id group by C.CMP_Name ;"
         mysql.query(query, (error, result) => {
             mysql.query(query2, (error, result2) => {
                 mysql.query(query3, (error, result3) => {
-
                     res.render("adminHome", { students: result, company: result2, applications: result3 })
                 })
 
@@ -63,8 +62,21 @@ app.get('/delete-student', (req, res) => {
     })
 });
 
-app.get('/update-form', (req, res) => {
-    res.render('update_form')
+app.get('/update-company', (req, res) => {
+    var { cmpName, role, criteria, salary, app_deadline } = req.query;
+    var values = [cmpName, role, criteria, salary, app_deadline];
+    res.render('update_form', { values });
+})
+app.post('/update-company', (req, res) => {
+    var { cmpName, role, criteria, salary, app_deadline, Description } = req.body;
+    var address = "http://localhost:5000/update-company?cmpName=" + cmpName + "&role=" + role + "&criteria=" + criteria + "&salary=" + salary + "&app_deadline=" + app_deadline;
+    var values = [cmpName, role, criteria, app_deadline, Description, salary, cmpName, role];
+    console.log(values);
+    var query = "update company set CMP_Name = ?,Role = ?,Criteria = ?,App_deadline = ?,Description = ?,Salary = ?  where CMP_Name = ? and Role = ? ";
+    mysql.query(query, values, (error, result) => {
+        if (error) throw error;
+        res.redirect(address)
+    })
 })
 
 
@@ -90,11 +102,16 @@ app.get('/studentHome', (req, res) => {
     const password = req.query.password;
     var query = "select * from student where USN = ? and Password =?";
     var cmpQuery = "select  * from company";
+    var application = "select * from application where Stu_id = ? "
     mysql.query(query, [usn, password], (error, result) => {
+        var id = result[0].Stu_id;
         if (result[0].USN === usn && result[0].Password === password) {
             mysql.query(cmpQuery, (error, result1) => {
-                if (error) throw error;
-                res.render('studentHome', { result, company: result1 })
+                mysql.query(application, id, (error, result2) => {
+                    if (error) throw error;
+                    res.render('studentHome', { result, company: result1, applicationRes: result2, message: true })
+                })
+
             })
         }
         else {
@@ -128,14 +145,14 @@ app.get('/cmpHome', (req, res) => {
     mysql.query(query, [name, password], (error, result) => {
         if (error) {
             console.log(error);
-            res.render('cmpLogin', { message: false });
+            res.render('cmpLogin');
         }
         else {
             const CMP_id = result[0].CMP_Id;
-            var query1 = "select S.USN,A.Status,S.Stu_id from student as S , application as A where S.Stu_id = A.Stu_id and A.Cmp_id =" + CMP_id;
+            var query1 = "select distinct S.USN,A.Status,S.Stu_id from student as S , application as A where S.Stu_id = A.Stu_id and A.Cmp_id =" + CMP_id + " group by S.USN ";
             mysql.query(query1, (error, result1) => {
                 if (error) throw error;
-                res.render('cmpHome', { result, students: result1, message: true });
+                res.render('cmpHome', { result, students: result1 });
             })
 
         }
@@ -173,6 +190,7 @@ app.post('/cmpSignUp', (req, res) => {
     });
 })
 
+//Running the server 
 app.listen(port, () => {
     console.log(`Server connection successfull at ${port}`);
 });

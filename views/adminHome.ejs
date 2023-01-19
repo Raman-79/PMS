@@ -105,11 +105,12 @@
             <th><%- company[i].CMP_Name %> </th>
             <th><%- company[i].Role %> </th>
             <th><%- company[i].Criteria %> </th>
-            <th><%- company[i]. Salary%> </th>
+            <th><%- company[i].Salary%> </th>
             <th><%- company[i].App_deadline %> </th>
             <th>
               <button class="btn btn-primary">
-                <a id="delete-btn" href="/update-company?CMP_id=<%- company[i].CMP_Id %>">Update</a>
+                <a id="delete-btn"
+                  href="/update-company?CMP_id=<%- company[i].CMP_Id %>&cmpName=<%- company[i].CMP_Name %>&role=<%- company[i].Role %>&criteria=<%- company[i].Criteria %>&salary=<%- company[i].Salary %>&app_deadline=<%- company[i].App_deadline %>">Update</a>
               </button>
               <button class="btn btn-danger">
                 <a id="delete-btn" href="/delete-company?id=<%- company[i].CMP_Id %>">Delete</a>

@@ -1,69 +1,86 @@
-<!DOCTYPE html>
 <html lang="en">
 
 <head>
-    <meta charset="UTF-8">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet"
-        integrity="sha384-GLhlTQ8iRABdZLl6O3oVMWSktQOp6b7In1Zl3/Jr59b6EGGoI1aFkw7cmDA6j6gD" crossorigin="anonymous" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta charset="UTF-8" />
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.1/jquery.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/js/bootstrap.min.js"></script>
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Document</title>
 </head>
-<script>
-    function accepted() {
-        var btn = document.getElementById('btn');
-        btn.className = "btn disabled"
-        btn.innerHTML = "Accepted"
+<style>
+    #delete-btn {
+        text-decoration: none;
+        color: aliceblue;
     }
-</script>
+</style>
+
+<div class="container">
+    <h1>Admin Page</h1>
+    <ul class="nav nav-tabs">
+        <li class="active"><a data-toggle="tab" href="#home">Home</a></li>
+        <li><a data-toggle="tab" href="#menu1">Accepted</a></li>
+        <li><a data-toggle="tab" href="#menu2">Rejected</a></li>
+        <li><a data-toggle="tab" href="#menu3">Pending</a></li>
+    </ul>
+
+    <div class="tab-content">
+        <div id="home" class="tab-pane fade in active">
+            <h1 class="dark">Hello <%- result[0].Name %></h1>
+            <br>
+            <h1>Company Details</h1>
+            <br>
+            <table class="table table-hover">
+                <thread>
+                    <tr>
+
+                        <th scope="col">Name</th>
+                        <th scope="col">Role</th>
+                        <th scope="col">Criteria</th>
+                        <th scope="col">Salary</th>
+                        <th scope="col">Deadline(YYYY-MM-DD)</th>
+                        <th scope="col">Description</th>
+                        <th scope="col"> Application </th>
+                    </tr>
+                </thread>
+                <% if(company.length > 0){ %>
+                <% for(var i = 0 ;i<company.length;i++){ %>
+                <tbody>
+                    <tr>
+                        <th><%- company[i].CMP_Name %></th>
+                        <th><%- company[i].Role %></th>
+                        <th><%- company[i].Criteria %> </th>
+                        <th><%- company[i].Salary%> </th>
+                        <th><%- company[i].App_deadline %> </th>
+                        <th><%- company[i].Description %> </th>
+                        <% if(company[i].Criteria > result[0].CGPA){ %>
+                        <th> <button class="btn disbaled">Unapplicable</button></th>
+                        <% }else{ %>
+                        <th><a
+                                href="/submit-application?CMP_id=<%- company[i].CMP_Id %>&Stu_id=<%- result[0].Stu_id %>&usn=<%- result[0].USN %>&password=<%- result[0].Password %>">
+                                <button id="btn" type="submit" class="btn btn-success" onclick=accepted()>
+                                    Apply </button></a>
+                        </th>
+                        <% } %>
+                        <% } %>
+                    </tr>
+                </tbody>
+                <% }else{ %>
+                <h1>No Company Data Found</h1>
+                <% } %>
+        </div>
+    </div>
+    <div id="menu1" class="tab-pane fade">
+        Hello
+    </div>
+    <div id="menu2" class="tab-pane fade">
+        Hello2
+    </div>
+</div>
 
 <body>
-    <h1 class="dark">Hello <%- result[0].Name %></h1>
-    <br>
-    <h1>Company Details</h1>
-    <br>
-
-    <table class="table table-hover ">
-        <thread>
-            <tr>
-
-                <th scope="col">Name</th>
-                <th scope="col">Role</th>
-                <th scope="col">Criteria</th>
-                <th scope="col">Salary</th>
-                <th scope="col">Deadline(YYYY-MM-DD)</th>
-                <th scope="col">Description</th>
-                <th scope="col"> Application </th>
-            </tr>
-        </thread>
-        <% if(company.length > 0){ %>
-        <% for(var i = 0 ;i<company.length;i++){ %>
-        <tbody>
-            <tr>
-                <th><%- company[i].CMP_Name %></th>
-                <th><%- company[i].Role %></th>
-                <th><%- company[i].Criteria %> </th>
-                <th><%- company[i].Salary%> </th>
-                <th><%- company[i].App_deadline %> </th>
-                <th><%- company[i].Description %> </th>
-                <% if(company[i].Criteria > result[0].CGPA){ %>
-                <th> <button class="btn disbaled">Unapplicable</button></th>
-                <% }else{ %>
-                <th><a
-                        href="/submit-application?CMP_id=<%- company[i].CMP_Id %>&Stu_id=<%- result[0].Stu_id %>&usn=<%- result[0].USN %>&password=<%- result[0].Password %>">
-                        <button id="btn" type="submit" class="btn btn-success" onclick=accepted()>
-                            Apply </button></a>
-                </th>
-                <% } %>
-                <% } %>
-            </tr>
-        </tbody>
-        <% }else{ %>
-        <h1>No Company Data Found</h1>
-        <% } %>
 
 </body>
-
-
 
 </html>
