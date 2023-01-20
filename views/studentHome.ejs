@@ -9,6 +9,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Document</title>
 </head>
+
 <script>
     function accepted() {
         var btn = document.getElementById('btn');
@@ -18,49 +19,143 @@
 </script>
 
 <body>
-    <h1 class="dark">Hello <%- result[0].Name %></h1>
-    <br>
-    <h1>Company Details</h1>
-    <br>
 
-    <table class="table table-hover ">
-        <thread>
-            <tr>
 
-                <th scope="col">Name</th>
-                <th scope="col">Role</th>
-                <th scope="col">Criteria</th>
-                <th scope="col">Salary</th>
-                <th scope="col">Deadline(YYYY-MM-DD)</th>
-                <th scope="col">Description</th>
-                <th scope="col"> Application </th>
-            </tr>
-        </thread>
-        <% if(company.length > 0){ %>
-        <% for(var i = 0 ;i<company.length;i++){ %>
-        <tbody>
-            <tr>
-                <th><%- company[i].CMP_Name %></th>
-                <th><%- company[i].Role %></th>
-                <th><%- company[i].Criteria %> </th>
-                <th><%- company[i].Salary%> </th>
-                <th><%- company[i].App_deadline %> </th>
-                <th><%- company[i].Description %> </th>
-                <% if(company[i].Criteria > result[0].CGPA){ %>
-                <th> <button class="btn disbaled">Unapplicable</button></th>
-                <% }else{ %>
-                <th><a
-                        href="/submit-application?CMP_id=<%- company[i].CMP_Id %>&Stu_id=<%- result[0].Stu_id %>&usn=<%- result[0].USN %>&password=<%- result[0].Password %>">
-                        <button id="btn" type="submit" class="btn btn-success" onclick=accepted()>
-                            Apply </button></a>
-                </th>
-                <% } %>
-                <% } %>
-            </tr>
-        </tbody>
-        <% }else{ %>
-        <h1>No Company Data Found</h1>
-        <% } %>
+
+    <div class="container">
+
+
+        <h1 class="dark">Hello <%- result[0].Name %></h1>
+        <br>
+        <h1>Company Details</h1>
+        <br>
+
+
+        <table class="table table-hover ">
+            <thread>
+                <tr>
+
+
+
+                    <div class="tab-content">
+                        <div id="home" class="tab-pane fade in active">
+
+                            <table class="table table-hover">
+                                <thread>
+                                    <tr>
+
+
+                                        <th scope="col">Name</th>
+                                        <th scope="col">Role</th>
+                                        <th scope="col">Criteria</th>
+                                        <th scope="col">Salary</th>
+                                        <th scope="col">Deadline(YYYY-MM-DD)</th>
+                                        <th scope="col">Description</th>
+                                        <th scope="col"> Application </th>
+                                    </tr>
+                                </thread>
+                                <% if(company.length > 0){ %>
+                                <% for(var i = 0 ;i<company.length;i++){ %>
+                                <tbody>
+                                    <tr>
+                                        <th><%- company[i].CMP_Name %></th>
+                                        <th><%- company[i].Role %></th>
+                                        <th><%- company[i].Criteria %> </th>
+                                        <th><%- company[i].Salary%> </th>
+                                        <th><%- company[i].App_deadline %> </th>
+                                        <th><%- company[i].Description %> </th>
+                                        <% if(company[i].Criteria > result[0].CGPA){ %>
+                                        <th> <button class="btn disbaled">Unapplicable</button></th>
+                                        <% }else{ %>
+                                        <th><a
+                                                href="/submit-application?CMP_id=<%- company[i].CMP_Id %>&Stu_id=<%- result[0].Stu_id %>&usn=<%- result[0].USN %>&password=<%- result[0].Password %>">
+                                                <button id="btn" type="submit" class="btn btn-success"
+                                                    onclick=accepted()>
+                                                    Apply </button></a>
+                                        </th>
+                                        <% } %>
+
+                                        <% } %>
+                                    </tr>
+                                </tbody>
+                                <% }else{ %>
+                                <h1>No Company Data Found</h1>
+                                <% } %>
+
+                        </div>
+                        <div id="menu1" class="tab-pane fade">
+                            <table class="table table-hover">
+                                <thread>
+                                    <tr>
+
+                                        <th scope="col">Name</th>
+                                        <th scope="col"> Application </th>
+                                    </tr>
+                                </thread>
+                                <% if(applicationRes.length > 0){ %>
+                                <% for(var i = 0 ;i<applicationRes.length;i++){ %>
+                                <tbody>
+                                    <tr>
+                                        <th><%- applicationRes[i].CMP_Name %></th>
+                                        <th><%- applicationRes[i].Status %></th>
+                                        <% } %>
+                                    </tr>
+                                </tbody>
+                                <% }else{ %>
+                                <h1>No Company Data Found</h1>
+                                <% } %>
+                        </div>
+                        <div id="menu2" class="tab-pane fade">
+                            <table class="table table-hover">
+                                <thread>
+                                    <tr>
+
+                                        <th scope="col">Name</th>
+                                        <th scope="col"> Application </th>
+                                    </tr>
+                                </thread>
+                                <% if(rejectApp.length > 0){ %>
+                                <% for(var i = 0 ;i<rejectApp.length;i++){ %>
+                                <tbody>
+                                    <tr>
+                                        <th><%- rejectApp[i].CMP_Name %></th>
+                                        <th><%- rejectApp[i].Status %></th>
+                                        <% } %>
+                                    </tr>
+                                </tbody>
+                                <% }else{ %>
+                                <h1>No Rejections</h1>
+                                <% } %>
+                        </div>
+                        <div id="menu3" class="tab-pane fade">
+                            <table class="table table-hover">
+                                <thread>
+                                    <tr>
+
+                                        <th scope="col">Name</th>
+                                        <th scope="col"> Application </th>
+                                    </tr>
+                                </thread>
+                                <% if(pendingApp.length > 0){ %>
+                                <% for(var i = 0 ;i<pendingApp.length;i++){ %>
+                                <tbody>
+                                    <tr>
+                                        <th><%- pendingApp[i].CMP_Name %></th>
+                                        <th><%- pendingApp[i].Status %></th>
+                                        <% } %>
+                                    </tr>
+                                </tbody>
+                                <% }else{ %>
+                                <h1>No Pending Applications</h1>
+                                <% } %>
+                        </div>
+                    </div>
+
+
+    </div>
+
+
+
 
 </body>
 

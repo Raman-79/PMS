@@ -90,11 +90,29 @@ app.get('/studentHome', (req, res) => {
     const password = req.query.password;
     var query = "select * from student where USN = ? and Password =?";
     var cmpQuery = "select  * from company";
+
+
+    var application = "select A.Status,C.CMP_Name from application as a , company as c where A.Stu_id = ? and A.Status = ? and A.Cmp_id = C.CMP_Id";
+    var application2 = "select distinct A.Status,C.CMP_Name from application as a , company as c where A.Stu_id = ? and A.Status = ? and A.Cmp_id = C.CMP_Id";
     mysql.query(query, [usn, password], (error, result) => {
         if (result[0].USN === usn && result[0].Password === password) {
             mysql.query(cmpQuery, (error, result1) => {
+
                 if (error) throw error;
                 res.render('studentHome', { result, company: result1 })
+
+                mysql.query(application, [id, 'Accepted'], (error, result2) => {
+                    mysql.query(application, [id, 'Rejected'], (error, result3) => {
+                        mysql.query(application2, [id, 'Pending'], (error, result4) => {
+                            if (error) throw error;
+                            res.render('studentHome', { result, company: result1, applicationRes: result2, rejectApp: result3, pendingApp: result4, message: true })
+                        })
+
+                    })
+
+                })
+
+
             })
         }
         else {
