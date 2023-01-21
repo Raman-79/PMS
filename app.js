@@ -225,7 +225,7 @@ app.post('/query', (req, res) => {
     var dateString = new Date(date.getTime() - (date.getTimezoneOffset() * 60000)).toISOString().split("T")[0];
     var query = "insert into query (Q_text,Q_date,Rep_id,Email,S_id) values ('" + message + "','" + dateString + "','" + 1111 + "','" + email + "','" + CMP_id + "')";
     mysql.query(query, (error, result) => {
-        console.log(result);
+        res.redirect('/query');
     })
 
 })
