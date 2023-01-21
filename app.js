@@ -9,7 +9,7 @@ const { error } = require('console');
 var url = require('url');
 const { response } = require('express');
 const { raw } = require('body-parser');
-
+const alert = require('alert');
 //Database Connection 
 const mysql = require('./sqlConnection').con;
 
@@ -33,11 +33,16 @@ app.get('/', (req, res) => {
 app.get('/adminHome', (req, res) => {
     const admin = req.query.admin;
     const password = req.query.password;
-
-    if (admin === "admin" && password === "admin@123") {
-        var query2 = "select * from company";
-        var query = "select * from student";
-        var query3 = "select distinct S.USN,C.CMP_Name,A.Status from student S ,company C ,application A where S.Stu_id = A.Stu_id and C.Cmp_id = A.Cmp_id group by C.CMP_Name ;"
+    const batch = req.query.batch;
+    var q1 = "select * from officer where Name = '" + admin + "' and Password = '" + password + "' and Batch = '" + batch + "'";
+    var query2 = "select * from company";
+    var query = "select * from student";
+    var query3 = "select distinct S.USN,C.CMP_Name,A.Status from student S ,company C ,application A where S.Stu_id = A.Stu_id and C.Cmp_id = A.Cmp_id group by C.CMP_Name ;"
+    mysql.query(q1, (error, result1) => {
+        if (result1.length === 0) {
+            alert('Invalid Credientials!')
+            res.redirect("/");
+        }
         mysql.query(query, (error, result) => {
             mysql.query(query2, (error, result2) => {
                 mysql.query(query3, (error, result3) => {
@@ -47,11 +52,7 @@ app.get('/adminHome', (req, res) => {
             })
         });
 
-    }
-
-    else {
-        res.render('home', { success: false });
-    }
+    })
 })
 app.get('/delete-student', (req, res) => {
     const id = req.query.id;
@@ -115,7 +116,12 @@ app.get('/studentHome', (req, res) => {
     var application = "select A.Status,C.CMP_Name from application as a , company as c where A.Stu_id = ? and A.Status = ? and A.Cmp_id = C.CMP_Id";
     var application2 = "select  A.Status,C.CMP_Name from application as a , company as c where A.Stu_id = ? and A.Status = ? and A.Cmp_id = C.CMP_Id  ";
     mysql.query(query, [usn, password], (error, result) => {
-        if (result[0].USN === usn && result[0].Password === password) {
+
+        if (result.length === 0) {
+            alert('Invalid Credientials!')
+            res.redirect("/login");
+        }
+        else if (result[0].USN === usn && result[0].Password === password) {
             mysql.query(cmpQuery, (error, result1) => {
                 var id = result[0].Stu_id;
                 if (error) throw error;
@@ -133,9 +139,7 @@ app.get('/studentHome', (req, res) => {
 
             })
         }
-        else {
-            res.render('login', { message: false })
-        }
+
     })
 });
 
@@ -162,10 +166,11 @@ app.get('/cmpHome', (req, res) => {
 
     var query = "select * from company where CMP_name = ? and Cmp_password = ?";
     mysql.query(query, [name, password], (error, result) => {
-        if (error) {
-            console.log(error);
-            res.render('cmpLogin');
+        if (result.length === 0) {
+            alert('Invalid Credientials!')
+            res.redirect("/cmpLogin");
         }
+
         else {
             const CMP_id = result[0].CMP_Id;
             var query1 = "select distinct S.USN,A.Status,S.Stu_id from student as S , application as A where S.Stu_id = A.Stu_id and A.Cmp_id =" + CMP_id + " group by S.USN ";

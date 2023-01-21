@@ -26,11 +26,6 @@
     <div class="container py-5 h-100">
       <div class="row d-flex justify-content-center align-items-center h-100">
         <div class="col-12 col-md-8 col-lg-6 col-xl-5">
-          <% if (success === false) { %>
-          <div class="alert alert-danger" role="alert">
-            Invalid ID or Password
-          </div>
-          <% } %>
           <div class="card bg-dark text-white" style="border-radius: 1rem;">
             <div class="card-body p-5 text-center">
 
@@ -52,7 +47,11 @@
                       placeholder="Password" name="password" />
 
                   </div>
+                  <div class="form-outline form-white mb-4">
+                    <input type="number" id="typePasswordX" class="form-control form-control-lg" placeholder="Batch"
+                      name="batch" />
 
+                  </div>
 
                   <button class="btn btn-outline-light btn-lg px-5" type="submit">
                     Login</button>
