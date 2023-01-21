@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <link rel="stylesheet" href="/static/query.css">
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.1/jquery.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/js/bootstrap.min.js"></script>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Query Page</title>
+</head>
+
+<body>
+    <div class="container">
+        <div class="row">
+            <div class="card d-flex justify-content-center mx-auto my-3 p-5">
+
+                <h2>Contact Us</h2>
+                <form action="" method="post">
+                    <div class="form-row">
+                        <div class="form-group col-md-6 first">
+                            <label for="inputFirstName"> NAME </label>
+                            <input type="text" class="form-control" id="inputFirstName" name="CMP_Name" required>
+                            <div id="fname_error" class="val_error"></div>
+                        </div>
+
+                    </div>
+                    <div class="form-row">
+                        <div class="form-group col-md-6">
+                            <label for="inputEmail">EMAIL</label>
+                            <input type="email" class="form-control" id="inputEmail" name="email">
+                            <div id="email_error" class="val_error"></div>
+                        </div>
+
+                    </div>
+                    <div class="form-group mt-0">
+                        <label for="exampleFormControlTextarea1">MESSAGE </label>
+                        <textarea class="form-control" id="exampleFormControlTextarea1" rows="3"
+                            name="message"></textarea>
+                        <div id="message_error" class="val_error"></div>
+                    </div>
+
+                    <div class="form-button pt-4">
+                        <button type="submit" class="btn btn-primary btn-block btn-lg" value="Register"
+                            name="register"><span>SEND MESSAGE</span></button>
+                    </div>
+            </div>
+            </form>
+        </div>
+    </div>
+</body>
+
+</html>

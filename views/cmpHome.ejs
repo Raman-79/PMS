@@ -9,7 +9,7 @@
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/js/bootstrap.min.js"></script>
 
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Document</title>
+    <title>Company Home</title>
 </head>
 <style>
     #delete_success {
@@ -19,7 +19,19 @@
 </style>
 
 <body>
-    <h1>Hello <%-result[0].CMP_Name%></h1>
+
+    <nav class="navbar navbar-inverse">
+        <div class="container-fluid">
+            <div class="navbar-header">
+                <a class="navbar-brand" href="#"> <%-result[0].CMP_Name%></a>
+            </div>
+            <ul class="nav navbar-nav">
+                <li class="active"><a href="#">Home</a></li>
+                <li><a href="/query?CMP_id=<%- result[0].CMP_Id  %>&CMP_Name= <%= result[0].CMP_Name  %>  ">Query</a>
+                </li>
+            </ul>
+        </div>
+    </nav>
     <h1>Application Details</h1>
     <table class="table table-hover">
         <thread>
@@ -62,12 +74,6 @@
         <% }else{ %>
         <h1>No Students Applied</h1>
         <% } %>
-
-
-
-
-
-        <!--Query to the admin-->
 </body>
 
 </html>
