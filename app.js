@@ -36,16 +36,17 @@ app.get('/adminHome', (req, res) => {
     const batch = req.query.batch;
     var q1 = "select * from officer where Name = '" + admin + "' and Password = '" + password + "' and Batch = '" + batch + "'";
     var query2 = "select * from company";
-    var query = "select * from student";
-    var query3 = "select distinct S.USN,C.CMP_Name,A.Status from student S ,company C ,application A where S.Stu_id = A.Stu_id and C.Cmp_id = A.Cmp_id group by C.CMP_Name ;"
+    var query = "select * from student where Batch = ?";
+    var query3 = "select distinct S.USN,C.CMP_Name,A.Status from student S ,company C ,application A where S.Stu_id = A.Stu_id and C.Cmp_id = A.Cmp_id and Batch = ? group by C.CMP_Name ;"
     mysql.query(q1, (error, result1) => {
+
         if (result1.length === 0) {
             alert('Invalid Credientials!')
             res.redirect("/");
         }
-        mysql.query(query, (error, result) => {
+        mysql.query(query, parseInt(batch), (error, result) => {
             mysql.query(query2, (error, result2) => {
-                mysql.query(query3, (error, result3) => {
+                mysql.query(query3, parseInt(batch), (error, result3) => {
                     res.render("adminHome", { students: result, company: result2, applications: result3 })
                 })
 
@@ -70,13 +71,14 @@ app.get('/update-company', (req, res) => {
     res.render('update_form', { values });
 })
 app.post('/update-company', (req, res) => {
+    var Cmp_id = req.query.CMP_id
     var { cmpName, role, criteria, salary, app_deadline, Description } = req.body;
     var address = "http://localhost:5000/update-company?cmpName=" + cmpName + "&role=" + role + "&criteria=" + criteria + "&salary=" + salary + "&app_deadline=" + app_deadline;
-    var values = [cmpName, role, criteria, app_deadline, Description, salary, cmpName, role];
-    console.log(values);
-    var query = "update company set CMP_Name = ?,Role = ?,Criteria = ?,App_deadline = ?,Description = ?,Salary = ?  where CMP_Name = ? and Role = ? ";
-    mysql.query(query, values, (error, result) => {
+
+    var query = "update company set CMP_Name ='" + cmpName + "',Role = '" + role + "',Criteria = '" + criteria + "',App_deadline = '" + app_deadline + "',Description = '" + Description + "',Salary = '" + salary + "'  where CMP_Name = '" + cmpName + "' and CMP_Id = '" + Cmp_id + "' ";
+    mysql.query(query, (error, result) => {
         if (error) throw error;
+        console.log(query);
         res.redirect(address)
     })
 })
