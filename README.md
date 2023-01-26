@@ -10,7 +10,7 @@ This Placement Management System is a DBMS Mini Project that uses Ejs, Nodejs, a
 * Companies can view the applications and change the status to accepted or rejected
 * The status of an application will be displayed on the student's home page
 
-# Features
+# Getting started
 
 * Make sure you have Node.js and Mysql installed on your local machine
 * Clone the repository and navigate to the root directory
